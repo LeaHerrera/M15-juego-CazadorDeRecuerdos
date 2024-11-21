@@ -3,12 +3,17 @@
     "version": "0.0.0",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "storyboard": "*",
+        "arcade-story": "github:microsoft/arcade-storytelling#v1.0.3"
     },
     "files": [
         "README.md",
         "main.blocks",
-        "main.ts"
+        "main.ts",
+        "tilemap.g.jres",
+        "tilemap.g.ts",
+        "main.py"
     ],
     "testFiles": [
         "test.ts"
