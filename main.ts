@@ -18,7 +18,30 @@ function Level1 () {
     sprites.destroy(PlayButton)
 }
 function Help () {
-	
+    sprites.destroy(Arrow)
+    sprites.destroy(HelpButton)
+    sprites.destroy(PlayButton)
+    tiles.setCurrentTilemap(tilemap`level4`)
+    Character = sprites.create(img`
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f f e 2 2 2 2 2 2 e e f . . 
+        . . f e 2 f f f f f f 2 e f . . 
+        . . f f f f e e e e f f f f . . 
+        . f f e f b f 4 4 f b f e f f . 
+        . f e e 4 1 f d d f 1 4 e e f . 
+        . . f f f f d d d d d e e f . . 
+        . f d d d d f 4 4 4 e e f . . . 
+        . f b b b b f 2 2 2 2 f 4 e . . 
+        . f b b b b f 2 2 2 2 f d 4 . . 
+        . . f c c f 4 5 5 4 4 f 4 4 . . 
+        . . . f f f f f f f f . . . . . 
+        . . . . . f f . . f f . . . . . 
+        `, SpriteKind.Player)
+    controller.moveSprite(Character)
+    scene.cameraFollowSprite(Character)
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Button, function (sprite, otherSprite) {
     if (otherSprite == PlayButton && controller.A.isPressed()) {
@@ -167,6 +190,26 @@ function Menu () {
     controller.moveSprite(Arrow)
     Arrow.setBounceOnWall(true)
 }
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite, location) {
+    tiles.setTileAt(location, sprites.dungeon.floorDark0)
+    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedNorth)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+    for (let value of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+    for (let value of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+})
+let Character: Sprite = null
 let PlayButton: Sprite = null
 let HelpButton: Sprite = null
 let Arrow: Sprite = null

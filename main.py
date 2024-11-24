@@ -7,26 +7,53 @@ def Level_Controler():
     if Level == 1:
         Level1()
     if Level == 2:
-        Level2()
-def Level2():
-    pass
+        Help()
 def Level1():
     sprites.destroy(Arrow)
-    sprites.destroy(Help)
-    sprites.destroy(Play)
+    sprites.destroy(HelpButton)
+    sprites.destroy(PlayButton)
+def Help():
+    global Character
+    sprites.destroy(Arrow)
+    sprites.destroy(HelpButton)
+    sprites.destroy(PlayButton)
+    tiles.set_current_tilemap(tilemap("""
+        level4
+    """))
+    Character = sprites.create(img("""
+            . . . . . . f f f f . . . . . . 
+                    . . . . f f f 2 2 f f f . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f f f e e e e e e f f f . . 
+                    . . f f e 2 2 2 2 2 2 e e f . . 
+                    . . f e 2 f f f f f f 2 e f . . 
+                    . . f f f f e e e e f f f f . . 
+                    . f f e f b f 4 4 f b f e f f . 
+                    . f e e 4 1 f d d f 1 4 e e f . 
+                    . . f f f f d d d d d e e f . . 
+                    . f d d d d f 4 4 4 e e f . . . 
+                    . f b b b b f 2 2 2 2 f 4 e . . 
+                    . f b b b b f 2 2 2 2 f d 4 . . 
+                    . . f c c f 4 5 5 4 4 f 4 4 . . 
+                    . . . f f f f f f f f . . . . . 
+                    . . . . . f f . . f f . . . . .
+        """),
+        SpriteKind.player)
+    controller.move_sprite(Character)
+    scene.camera_follow_sprite(Character)
 
 def on_on_overlap(sprite, otherSprite):
     global Level
-    if otherSprite == Play and controller.A.is_pressed():
+    if otherSprite == PlayButton and controller.A.is_pressed():
         Level = 1
         Level_Controler()
-    if otherSprite == Help and controller.A.is_pressed():
+    if otherSprite == HelpButton and controller.A.is_pressed():
         Level = 2
         Level_Controler()
 sprites.on_overlap(SpriteKind.player, SpriteKind.Button, on_on_overlap)
 
 def Menu():
-    global Play, Help, Arrow
+    global PlayButton, HelpButton, Arrow
     scene.set_background_image(img("""
         ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff99d99bbbbbcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -104,7 +131,7 @@ def Menu():
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff999999999fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     """))
-    Play = sprites.create(img("""
+    PlayButton = sprites.create(img("""
             ff1ffffffffffffffffffffffff1ff
                     f1ff6666666666666666666666ff1f
                     1ff688888888888888888888886ff1
@@ -123,8 +150,8 @@ def Menu():
                     ff1ffffffffffffffffffffffff1ff
         """),
         SpriteKind.Button)
-    Play.set_position(80, 90)
-    Help = sprites.create(img("""
+    PlayButton.set_position(80, 90)
+    HelpButton = sprites.create(img("""
             ff1ffffffffffffffffffffffff1ff
                     f1ff6666666666666666666666ff1f
                     1ff688888888888888888888886ff1
@@ -143,7 +170,7 @@ def Menu():
                     ff1ffffffffffffffffffffffff1ff
         """),
         SpriteKind.Button)
-    Help.set_position(80, 110)
+    HelpButton.set_position(80, 110)
     Arrow = sprites.create(img("""
             . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -165,8 +192,28 @@ def Menu():
         SpriteKind.player)
     controller.move_sprite(Arrow)
     Arrow.set_bounce_on_wall(True)
-Play: Sprite = None
-Help: Sprite = None
+
+def on_overlap_tile(sprite2, location):
+    tiles.set_tile_at(location, sprites.dungeon.floor_dark0)
+    for value in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
+        tiles.set_tile_at(value, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value, False)
+    for value2 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
+        tiles.set_tile_at(value2, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value2, False)
+    for value3 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
+        tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value3, False)
+    for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
+        tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value4, False)
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.collectible_insignia,
+    on_overlap_tile)
+
+Character: Sprite = None
+PlayButton: Sprite = None
+HelpButton: Sprite = None
 Arrow: Sprite = None
 Level = 0
 game.splash("Cazador De Recuerdos")
