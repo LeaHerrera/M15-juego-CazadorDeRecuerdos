@@ -1,1 +1,5 @@
- 
+scene.setBackgroundColor(1)
+scene.setBackgroundImage(assets.image`aa`)
+let player1 = sprites.create(assets.image`protagonista2`, SpriteKind.Player)
+controller.moveSprite(player1)
+scene.cameraFollowSprite(player1)
