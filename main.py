@@ -7,14 +7,48 @@ class SpriteKind:
 def on_on_overlap(sprite, otherSprite):
     
     def on_start_cutscene():
+        global PlayerName, teletransporte
         story.show_player_choices("Hablar con la Bruja", "Salir")
         if story.check_last_answer("Hablar con la Bruja"):
-            story.print_character_text("Hola soy la Bruja")
+            PlayerName = game.ask_for_string("Como te llamas aventurero?")
+            story.print_character_text(" Hola " + PlayerName + ". Eres un androide defectuoso, creado para una tarea que ya has olvidado.",
+                "Bruja")
+            story.print_character_text("Tu memoria se ha perdido, fragmentada en pedazos, y ahora viajas entre diferentes épocas de la humanidad para reconstruirla.",
+                "Bruja")
+            story.print_character_text("Cada era que atraviesas está llena de pistas, enigmas y personas que, aunque no lo sepan, tienen fragmentos de tu historia.",
+                "Bruja")
+            story.print_character_text("Debes aprender a confiar en los demás, incluso cuando las piezas de tu identidad estén dispersas en",
+                "Bruja")
+            story.print_character_text("el tiempo, y cada decisión puede acercarte o alejarte de la verdad.",
+                "Bruja")
+            story.print_character_text("Para seguir con la historia vete al transportador", "Bruja")
+            teletransporte = True
+            story.cancel_all_cutscenes()
         if story.check_last_answer("Salir"):
             story.cancel_all_cutscenes()
     story.start_cutscene(on_start_cutscene)
     
 sprites.on_overlap(SpriteKind.player, SpriteKind.Bruja, on_on_overlap)
+
+def on_overlap_tile(sprite2, location):
+    tiles.set_tile_at(location, sprites.dungeon.floor_dark0)
+    for value in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
+        tiles.set_tile_at(value, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value, False)
+    for value2 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
+        tiles.set_tile_at(value2, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value2, False)
+    for value3 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
+        tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value3, False)
+    for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
+        tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value4, False)
+scene.on_overlap_tile(SpriteKind.player,
+    assets.tile("""
+        myTile
+    """),
+    on_overlap_tile)
 
 def Level_Controler():
     if Level == 0:
@@ -23,6 +57,16 @@ def Level_Controler():
         Level1()
     if Level == 2:
         Help()
+    if Level == 3:
+        Level2()
+def Level2():
+    sprites.destroy(PlayButton)
+    sprites.destroy(HelpButton)
+    sprites.destroy(Arrow2)
+    sprites.destroy(Bruja2)
+    tiles.set_current_tilemap(tilemap("""
+        level8
+    """))
 def Level1():
     global Character, Bruja2
     sprites.destroy(Arrow2)
@@ -72,8 +116,10 @@ def Level1():
         """),
         SpriteKind.Bruja)
     tiles.place_on_tile(Bruja2, tiles.get_tile_location(10, 12))
+    if teletransporte == False:
+        story.print_character_text("Lo primero que tienes que hacer es hablar con la bruja.")
 
-def on_on_overlap2(sprite2, otherSprite2):
+def on_on_overlap2(sprite3, otherSprite2):
     global Level
     if otherSprite2 == PlayButton and controller.A.is_pressed():
         Level = 1
@@ -228,29 +274,22 @@ def Menu():
     controller.move_sprite(Arrow2)
     Arrow2.set_bounce_on_wall(True)
 
-def on_overlap_tile(sprite3, location):
-    tiles.set_tile_at(location, sprites.dungeon.floor_dark0)
-    for value in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
-        tiles.set_tile_at(value, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value, False)
-    for value2 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
-        tiles.set_tile_at(value2, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value2, False)
-    for value3 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
-        tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value3, False)
-    for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
-        tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value4, False)
+def on_overlap_tile2(sprite4, location2):
+    global Level
+    if teletransporte == True:
+        Level = 3
+        Level_Controler()
 scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.collectible_insignia,
-    on_overlap_tile)
+    on_overlap_tile2)
 
-Bruja2: Sprite = None
 Character: Sprite = None
-PlayButton: Sprite = None
-HelpButton: Sprite = None
+Bruja2: Sprite = None
 Arrow2: Sprite = None
+HelpButton: Sprite = None
+PlayButton: Sprite = None
+teletransporte = False
+PlayerName = ""
 Level = 0
 game.splash("Cazador De Recuerdos")
 Level = 0

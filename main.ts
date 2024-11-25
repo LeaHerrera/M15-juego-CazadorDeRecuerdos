@@ -8,12 +8,38 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bruja, function (sprite, otherSp
         story.showPlayerChoices("Hablar con la Bruja", "Salir")
         if (story.checkLastAnswer("Hablar con la Bruja")) {
             PlayerName = game.askForString("Como te llamas aventurero?")
-            story.printCharacterText("Hola" + PlayerName + ", yo soy la bruja todopoderosa de esta tierra, escuche que algien te robo tus recuerdos ", "Bruja")
+            story.printCharacterText(" Hola " + PlayerName + ". Eres un androide defectuoso, creado para una tarea que ya has olvidado.", "Bruja")
+            story.printCharacterText("Tu memoria se ha perdido, fragmentada en pedazos, y ahora viajas entre diferentes épocas de la humanidad para reconstruirla.", "Bruja")
+            story.printCharacterText("Cada era que atraviesas está llena de pistas, enigmas y personas que, aunque no lo sepan, tienen fragmentos de tu historia.", "Bruja")
+            story.printCharacterText("Debes aprender a confiar en los demás, incluso cuando las piezas de tu identidad estén dispersas en", "Bruja")
+            story.printCharacterText("el tiempo, y cada decisión puede acercarte o alejarte de la verdad.", "Bruja")
+            story.printCharacterText("Para seguir con la historia vete al transportador", "Bruja")
+            teletransporte = true
+            story.cancelAllCutscenes()
         }
         if (story.checkLastAnswer("Salir")) {
             story.cancelAllCutscenes()
         }
     })
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite, location) {
+    tiles.setTileAt(location, sprites.dungeon.floorDark0)
+    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedNorth)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+    for (let value of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+    for (let value of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
 })
 function Level_Controler () {
     if (Level == 0) {
@@ -25,6 +51,16 @@ function Level_Controler () {
     if (Level == 2) {
         Help()
     }
+    if (Level == 3) {
+        Level2()
+    }
+}
+function Level2 () {
+    sprites.destroy(PlayButton)
+    sprites.destroy(HelpButton)
+    sprites.destroy(Arrow)
+    sprites.destroy(Bruja)
+    tiles.setCurrentTilemap(tilemap`level8`)
 }
 function Level1 () {
     sprites.destroy(Arrow)
@@ -70,6 +106,9 @@ function Level1 () {
         . . . . . f f f f f f . . . . . 
         `, SpriteKind.Bruja)
     tiles.placeOnTile(Bruja, tiles.getTileLocation(10, 12))
+    if (teletransporte == false) {
+        story.printCharacterText("Lo primero que tienes que hacer es hablar con la bruja.")
+    }
 }
 sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite, otherSprite) {
     if (otherSprite == PlayButton && controller.A.isPressed()) {
@@ -224,29 +263,17 @@ function Menu () {
     Arrow.setBounceOnWall(true)
 }
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite, location) {
-    tiles.setTileAt(location, sprites.dungeon.floorDark0)
-    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedNorth)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
-    }
-    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
-    }
-    for (let value of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
-    }
-    for (let value of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
+    if (teletransporte == true) {
+        Level = 3
+        Level_Controler()
     }
 })
-let Bruja: Sprite = null
 let Character: Sprite = null
-let PlayButton: Sprite = null
-let HelpButton: Sprite = null
+let Bruja: Sprite = null
 let Arrow: Sprite = null
+let HelpButton: Sprite = null
+let PlayButton: Sprite = null
+let teletransporte = false
 let PlayerName = ""
 let Level = 0
 game.splash("Cazador De Recuerdos")
