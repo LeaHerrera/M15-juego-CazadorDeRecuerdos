@@ -1,6 +1,20 @@
 namespace SpriteKind {
     export const Button = SpriteKind.create()
+    export const Arrow = SpriteKind.create()
+    export const Bruja = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Bruja, function (sprite, otherSprite) {
+    story.startCutscene(function () {
+        story.showPlayerChoices("Hablar con la Bruja", "Salir")
+        if (story.checkLastAnswer("Hablar con la Bruja")) {
+            PlayerName = game.askForString("Como te llamas aventurero?")
+            story.printCharacterText("Hola" + PlayerName + ", yo soy la bruja todopoderosa de esta tierra, escuche que algien te robo tus recuerdos ", "Bruja")
+        }
+        if (story.checkLastAnswer("Salir")) {
+            story.cancelAllCutscenes()
+        }
+    })
+})
 function Level_Controler () {
     if (Level == 0) {
         Menu()
@@ -13,11 +27,6 @@ function Level_Controler () {
     }
 }
 function Level1 () {
-    sprites.destroy(Arrow)
-    sprites.destroy(HelpButton)
-    sprites.destroy(PlayButton)
-}
-function Help () {
     sprites.destroy(Arrow)
     sprites.destroy(HelpButton)
     sprites.destroy(PlayButton)
@@ -42,8 +51,27 @@ function Help () {
         `, SpriteKind.Player)
     controller.moveSprite(Character)
     scene.cameraFollowSprite(Character)
+    Bruja = sprites.create(img`
+        . . . . . . . c c . . . . . . . 
+        . . . . . . c 5 c . . . . . . . 
+        . . . . c c 5 5 5 c c c . . . . 
+        . . c c c c 5 5 5 5 c b c c . . 
+        . c b b 5 b 5 5 5 5 b 5 b b c . 
+        . c b 5 5 b b 5 5 b b 5 5 b c . 
+        . . c 5 5 5 b b b b 5 5 5 f . . 
+        . . . f 5 5 5 5 5 5 5 5 f f . . 
+        . . . . f e e e f b e e f f . . 
+        . . . . f e b b f 1 b f f f . . 
+        . . . . f b b b b b b f f . . . 
+        . . . . . f e e e e f e e . . . 
+        . . . . . f 5 b b e b b e . . . 
+        . . . . f 5 5 5 5 e b b e . . . 
+        . . . . c b 5 5 5 5 e e . . . . 
+        . . . . . f f f f f f . . . . . 
+        `, SpriteKind.Bruja)
+    tiles.placeOnTile(Bruja, tiles.getTileLocation(10, 12))
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Button, function (sprite, otherSprite) {
+sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite, otherSprite) {
     if (otherSprite == PlayButton && controller.A.isPressed()) {
         Level = 1
         Level_Controler()
@@ -53,6 +81,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Button, function (sprite, otherS
         Level_Controler()
     }
 })
+function Help () {
+    sprites.destroy(Arrow)
+    sprites.destroy(HelpButton)
+    sprites.destroy(PlayButton)
+}
 function Menu () {
     scene.setBackgroundImage(img`
         ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -186,7 +219,7 @@ function Menu () {
         . f f f f f f f f f f f f f f . 
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Player)
+        `, SpriteKind.Arrow)
     controller.moveSprite(Arrow)
     Arrow.setBounceOnWall(true)
 }
@@ -209,10 +242,12 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
         tiles.setWallAt(value, false)
     }
 })
+let Bruja: Sprite = null
 let Character: Sprite = null
 let PlayButton: Sprite = null
 let HelpButton: Sprite = null
 let Arrow: Sprite = null
+let PlayerName = ""
 let Level = 0
 game.splash("Cazador De Recuerdos")
 Level = 0

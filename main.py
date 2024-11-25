@@ -1,6 +1,21 @@
 @namespace
 class SpriteKind:
     Button = SpriteKind.create()
+    Arrow = SpriteKind.create()
+    Bruja = SpriteKind.create()
+
+def on_on_overlap(sprite, otherSprite):
+    
+    def on_start_cutscene():
+        story.show_player_choices("Hablar con la Bruja", "Salir")
+        if story.check_last_answer("Hablar con la Bruja"):
+            story.print_character_text("Hola soy la Bruja")
+        if story.check_last_answer("Salir"):
+            story.cancel_all_cutscenes()
+    story.start_cutscene(on_start_cutscene)
+    
+sprites.on_overlap(SpriteKind.player, SpriteKind.Bruja, on_on_overlap)
+
 def Level_Controler():
     if Level == 0:
         Menu()
@@ -9,12 +24,8 @@ def Level_Controler():
     if Level == 2:
         Help()
 def Level1():
-    sprites.destroy(Arrow)
-    sprites.destroy(HelpButton)
-    sprites.destroy(PlayButton)
-def Help():
-    global Character
-    sprites.destroy(Arrow)
+    global Character, Bruja2
+    sprites.destroy(Arrow2)
     sprites.destroy(HelpButton)
     sprites.destroy(PlayButton)
     tiles.set_current_tilemap(tilemap("""
@@ -41,19 +52,43 @@ def Help():
         SpriteKind.player)
     controller.move_sprite(Character)
     scene.camera_follow_sprite(Character)
+    Bruja2 = sprites.create(img("""
+            . . . . . . . c c . . . . . . . 
+                    . . . . . . c 5 c . . . . . . . 
+                    . . . . c c 5 5 5 c c c . . . . 
+                    . . c c c c 5 5 5 5 c b c c . . 
+                    . c b b 5 b 5 5 5 5 b 5 b b c . 
+                    . c b 5 5 b b 5 5 b b 5 5 b c . 
+                    . . c 5 5 5 b b b b 5 5 5 f . . 
+                    . . . f 5 5 5 5 5 5 5 5 f f . . 
+                    . . . . f e e e f b e e f f . . 
+                    . . . . f e b b f 1 b f f f . . 
+                    . . . . f b b b b b b f f . . . 
+                    . . . . . f e e e e f e e . . . 
+                    . . . . . f 5 b b e b b e . . . 
+                    . . . . f 5 5 5 5 e b b e . . . 
+                    . . . . c b 5 5 5 5 e e . . . . 
+                    . . . . . f f f f f f . . . . .
+        """),
+        SpriteKind.Bruja)
+    tiles.place_on_tile(Bruja2, tiles.get_tile_location(10, 12))
 
-def on_on_overlap(sprite, otherSprite):
+def on_on_overlap2(sprite2, otherSprite2):
     global Level
-    if otherSprite == PlayButton and controller.A.is_pressed():
+    if otherSprite2 == PlayButton and controller.A.is_pressed():
         Level = 1
         Level_Controler()
-    if otherSprite == HelpButton and controller.A.is_pressed():
+    if otherSprite2 == HelpButton and controller.A.is_pressed():
         Level = 2
         Level_Controler()
-sprites.on_overlap(SpriteKind.player, SpriteKind.Button, on_on_overlap)
+sprites.on_overlap(SpriteKind.Arrow, SpriteKind.Button, on_on_overlap2)
 
+def Help():
+    sprites.destroy(Arrow2)
+    sprites.destroy(HelpButton)
+    sprites.destroy(PlayButton)
 def Menu():
-    global PlayButton, HelpButton, Arrow
+    global PlayButton, HelpButton, Arrow2
     scene.set_background_image(img("""
         ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff99d99bbbbbcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -171,7 +206,7 @@ def Menu():
         """),
         SpriteKind.Button)
     HelpButton.set_position(80, 110)
-    Arrow = sprites.create(img("""
+    Arrow2 = sprites.create(img("""
             . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -189,11 +224,11 @@ def Menu():
                     . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . .
         """),
-        SpriteKind.player)
-    controller.move_sprite(Arrow)
-    Arrow.set_bounce_on_wall(True)
+        SpriteKind.Arrow)
+    controller.move_sprite(Arrow2)
+    Arrow2.set_bounce_on_wall(True)
 
-def on_overlap_tile(sprite2, location):
+def on_overlap_tile(sprite3, location):
     tiles.set_tile_at(location, sprites.dungeon.floor_dark0)
     for value in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
         tiles.set_tile_at(value, sprites.dungeon.floor_mixed)
@@ -211,10 +246,11 @@ scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.collectible_insignia,
     on_overlap_tile)
 
+Bruja2: Sprite = None
 Character: Sprite = None
 PlayButton: Sprite = None
 HelpButton: Sprite = None
-Arrow: Sprite = None
+Arrow2: Sprite = None
 Level = 0
 game.splash("Cazador De Recuerdos")
 Level = 0
