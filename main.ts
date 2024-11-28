@@ -28,17 +28,17 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite, lo
         tiles.setTileAt(value, sprites.dungeon.floorMixed)
         tiles.setWallAt(value, false)
     }
-    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
+    for (let value2 of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
+        tiles.setTileAt(value2, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value2, false)
     }
-    for (let value of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
+    for (let value3 of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
+        tiles.setTileAt(value3, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value3, false)
     }
-    for (let value of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
+    for (let value4 of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
+        tiles.setTileAt(value4, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value4, false)
     }
 })
 function Level_Controler () {
@@ -58,12 +58,12 @@ function Level_Controler () {
 function Level2 () {
     sprites.destroy(PlayButton)
     sprites.destroy(HelpButton)
-    sprites.destroy(Arrow)
-    sprites.destroy(Bruja)
-    tiles.setCurrentTilemap(tilemap`level8`)
+    sprites.destroy(Arrow2)
+    sprites.destroy(Bruja2)
+    tiles.setCurrentTilemap(tilemap`level11`)
 }
 function Level1 () {
-    sprites.destroy(Arrow)
+    sprites.destroy(Arrow2)
     sprites.destroy(HelpButton)
     sprites.destroy(PlayButton)
     tiles.setCurrentTilemap(tilemap`level4`)
@@ -87,7 +87,7 @@ function Level1 () {
         `, SpriteKind.Player)
     controller.moveSprite(Character)
     scene.cameraFollowSprite(Character)
-    Bruja = sprites.create(img`
+    Bruja2 = sprites.create(img`
         . . . . . . . c c . . . . . . . 
         . . . . . . c 5 c . . . . . . . 
         . . . . c c 5 5 5 c c c . . . . 
@@ -105,7 +105,7 @@ function Level1 () {
         . . . . c b 5 5 5 5 e e . . . . 
         . . . . . f f f f f f . . . . . 
         `, SpriteKind.Bruja)
-    tiles.placeOnTile(Bruja, tiles.getTileLocation(10, 12))
+    tiles.placeOnTile(Bruja2, tiles.getTileLocation(10, 12))
     if (teletransporte == false) {
         story.printCharacterText("Lo primero que tienes que hacer es hablar con la bruja.")
     }
@@ -121,7 +121,7 @@ sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite, otherSp
     }
 })
 function Help () {
-    sprites.destroy(Arrow)
+    sprites.destroy(Arrow2)
     sprites.destroy(HelpButton)
     sprites.destroy(PlayButton)
 }
@@ -241,7 +241,7 @@ function Menu () {
         ff1ffffffffffffffffffffffff1ff
         `, SpriteKind.Button)
     HelpButton.setPosition(80, 110)
-    Arrow = sprites.create(img`
+    Arrow2 = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -259,8 +259,8 @@ function Menu () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.Arrow)
-    controller.moveSprite(Arrow)
-    Arrow.setBounceOnWall(true)
+    controller.moveSprite(Arrow2)
+    Arrow2.setBounceOnWall(true)
 }
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite, location) {
     if (teletransporte == true) {
@@ -269,8 +269,8 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
     }
 })
 let Character: Sprite = null
-let Bruja: Sprite = null
-let Arrow: Sprite = null
+let Bruja2: Sprite = null
+let Arrow2: Sprite = null
 let HelpButton: Sprite = null
 let PlayButton: Sprite = null
 let teletransporte = false
