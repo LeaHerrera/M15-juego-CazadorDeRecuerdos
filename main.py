@@ -30,26 +30,6 @@ def on_on_overlap(sprite, otherSprite):
     
 sprites.on_overlap(SpriteKind.player, SpriteKind.Bruja, on_on_overlap)
 
-def on_overlap_tile(sprite2, location):
-    tiles.set_tile_at(location, sprites.dungeon.floor_dark0)
-    for value in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
-        tiles.set_tile_at(value, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value, False)
-    for value2 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
-        tiles.set_tile_at(value2, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value2, False)
-    for value3 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
-        tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value3, False)
-    for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
-        tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value4, False)
-scene.on_overlap_tile(SpriteKind.player,
-    assets.tile("""
-        myTile
-    """),
-    on_overlap_tile)
-
 def Level_Controler():
     if Level == 0:
         Menu()
@@ -128,6 +108,15 @@ def on_on_overlap2(sprite3, otherSprite2):
         Level = 2
         Level_Controler()
 sprites.on_overlap(SpriteKind.Arrow, SpriteKind.Button, on_on_overlap2)
+
+def on_overlap_tile(sprite4, location2):
+    global Level
+    if teletransporte == True:
+        Level = 3
+        Level_Controler()
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.collectible_insignia,
+    on_overlap_tile)
 
 def Help():
     sprites.destroy(Arrow2)
@@ -274,13 +263,24 @@ def Menu():
     controller.move_sprite(Arrow2)
     Arrow2.set_bounce_on_wall(True)
 
-def on_overlap_tile2(sprite4, location2):
-    global Level
-    if teletransporte == True:
-        Level = 3
-        Level_Controler()
+def on_overlap_tile2(sprite2, location):
+    tiles.set_tile_at(location, sprites.dungeon.floor_dark0)
+    for value in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
+        tiles.set_tile_at(value, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value, False)
+    for value2 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
+        tiles.set_tile_at(value2, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value2, False)
+    for value3 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
+        tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value3, False)
+    for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
+        tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value4, False)
 scene.on_overlap_tile(SpriteKind.player,
-    sprites.dungeon.collectible_insignia,
+    assets.tile("""
+        myTile
+    """),
     on_overlap_tile2)
 
 Character: Sprite = None

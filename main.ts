@@ -41,7 +41,7 @@ function Level2 () {
     sprites.destroy(HelpButton)
     sprites.destroy(Arrow2)
     sprites.destroy(Bruja2)
-    tiles.setCurrentTilemap(tilemap`level8`)
+    tiles.setCurrentTilemap(tilemap`level11`)
 }
 function Level1 () {
     sprites.destroy(Arrow2)
