@@ -22,25 +22,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bruja, function (sprite, otherSp
         }
     })
 })
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite, location) {
-    tiles.setTileAt(location, sprites.dungeon.floorDark0)
-    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedNorth)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
-    }
-    for (let value2 of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
-        tiles.setTileAt(value2, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value2, false)
-    }
-    for (let value3 of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
-        tiles.setTileAt(value3, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value3, false)
-    }
-    for (let value4 of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
-        tiles.setTileAt(value4, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value4, false)
-    }
-})
 function Level_Controler () {
     if (Level == 0) {
         Menu()
@@ -60,7 +41,7 @@ function Level2 () {
     sprites.destroy(HelpButton)
     sprites.destroy(Arrow2)
     sprites.destroy(Bruja2)
-    tiles.setCurrentTilemap(tilemap`level11`)
+    tiles.setCurrentTilemap(tilemap`level8`)
 }
 function Level1 () {
     sprites.destroy(Arrow2)
@@ -110,13 +91,19 @@ function Level1 () {
         story.printCharacterText("Lo primero que tienes que hacer es hablar con la bruja.")
     }
 }
-sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite, otherSprite) {
-    if (otherSprite == PlayButton && controller.A.isPressed()) {
+sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite3, otherSprite2) {
+    if (otherSprite2 == PlayButton && controller.A.isPressed()) {
         Level = 1
         Level_Controler()
     }
-    if (otherSprite == HelpButton && controller.A.isPressed()) {
+    if (otherSprite2 == HelpButton && controller.A.isPressed()) {
         Level = 2
+        Level_Controler()
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite4, location2) {
+    if (teletransporte == true) {
+        Level = 3
         Level_Controler()
     }
 })
@@ -262,10 +249,23 @@ function Menu () {
     controller.moveSprite(Arrow2)
     Arrow2.setBounceOnWall(true)
 }
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite, location) {
-    if (teletransporte == true) {
-        Level = 3
-        Level_Controler()
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite2, location) {
+    tiles.setTileAt(location, sprites.dungeon.floorDark0)
+    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedNorth)) {
+        tiles.setTileAt(value, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value, false)
+    }
+    for (let value2 of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
+        tiles.setTileAt(value2, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value2, false)
+    }
+    for (let value3 of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
+        tiles.setTileAt(value3, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value3, false)
+    }
+    for (let value4 of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
+        tiles.setTileAt(value4, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value4, false)
     }
 })
 let Character: Sprite = null
