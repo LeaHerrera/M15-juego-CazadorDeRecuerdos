@@ -5,9 +5,11 @@ class SpriteKind:
     Bruja = SpriteKind.create()
 
 def on_on_overlap(sprite, otherSprite):
+    global DialogMode
+    DialogMode = True
     
     def on_start_cutscene():
-        global PlayerName, teletransporte
+        global PlayerName, teletransporte, DialogMode
         story.show_player_choices("Hablar con la Bruja", "Salir")
         if story.check_last_answer("Hablar con la Bruja"):
             PlayerName = game.ask_for_string("Como te llamas aventurero?")
@@ -23,15 +25,18 @@ def on_on_overlap(sprite, otherSprite):
                 "Bruja")
             story.print_character_text("Para seguir con la historia vete al transportador", "Bruja")
             teletransporte = True
+            DialogMode = False
             story.cancel_all_cutscenes()
         if story.check_last_answer("Salir"):
             story.cancel_all_cutscenes()
+            DialogMode = False
     story.start_cutscene(on_start_cutscene)
     
+    pause(2000)
 sprites.on_overlap(SpriteKind.player, SpriteKind.Bruja, on_on_overlap)
 
-def wolk():
-    if controller.up.is_pressed():
+def on_up_pressed():
+    if Existe:
         animation.run_image_animation(Character,
             [img("""
                     . . . . . . f f f f . . . . . . 
@@ -107,7 +112,333 @@ def wolk():
                 """)],
             500,
             False)
-    if controller.down.is_pressed():
+controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
+
+def Level_Controler():
+    global teletransporte
+    if Level == 0:
+        Menu()
+    if Level == 1:
+        Level1()
+    if Level == 2:
+        Help()
+    if Level == 3:
+        teletransporte = False
+        Level2()
+    if Level == 4:
+        Level3()
+def Level2():
+    global Chest
+    sprites.destroy(PlayButton)
+    sprites.destroy(HelpButton)
+    sprites.destroy(Arrow2)
+    sprites.destroy(Bruja2)
+    tiles.set_current_tilemap(tilemap("""
+        level11
+    """))
+    game.show_long_text("Este es el primer nivel, encuentra todos los cofres y abrelos para obtener",
+        DialogLayout.BOTTOM)
+    game.show_long_text("la llave que le abrrira la puerta del nivel 2",
+        DialogLayout.BOTTOM)
+    game.show_long_text("En cada cofre encontarars una parte de la llave",
+        DialogLayout.BOTTOM)
+    Chest = 0
+
+def on_a_pressed():
+    if DialogMode == True:
+        story.clear_all_text()
+controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
+
+def Level3():
+    tiles.set_current_tilemap(tilemap("""
+        level9
+    """))
+    Character.set_position(1, 14)
+
+def on_left_pressed():
+    if Existe:
+        animation.run_image_animation(Character,
+            [img("""
+                    . . . . f f f f f f . . . . . . 
+                                . . . f 2 f e e e e f f . . . . 
+                                . . f 2 2 2 f e e e e f f . . . 
+                                . . f e e e e f f e e e f . . . 
+                                . f e 2 2 2 2 e e f f f f . . . 
+                                . f 2 e f f f f 2 2 2 e f . . . 
+                                . f f f e e e f f f f f f f . . 
+                                . f e e 4 4 f b e 4 4 e f f . . 
+                                . . f e d d f 1 4 d 4 e e f . . 
+                                . . . f d d d d 4 e e e f . . . 
+                                . . . f e 4 4 4 e e f f . . . . 
+                                . . . f 2 2 2 e d d 4 . . . . . 
+                                . . . f 2 2 2 e d d e . . . . . 
+                                . . . f 5 5 4 f e e f . . . . . 
+                                . . . . f f f f f f . . . . . . 
+                                . . . . . . f f f . . . . . . .
+                """),
+                img("""
+                    . . . . . . . . . . . . . . . . 
+                                . . . . f f f f f f . . . . . . 
+                                . . . f 2 f e e e e f f . . . . 
+                                . . f 2 2 2 f e e e e f f . . . 
+                                . . f e e e e f f e e e f . . . 
+                                . f e 2 2 2 2 e e f f f f . . . 
+                                . f 2 e f f f f 2 2 2 e f . . . 
+                                . f f f e e e f f f f f f f . . 
+                                . f e e 4 4 f b e 4 4 e f f . . 
+                                . . f e d d f 1 4 d 4 e e f . . 
+                                . . . f d d d e e e e e f . . . 
+                                . . . f e 4 e d d 4 f . . . . . 
+                                . . . f 2 2 e d d e f . . . . . 
+                                . . f f 5 5 f e e f f f . . . . 
+                                . . f f f f f f f f f f . . . . 
+                                . . . f f f . . . f f . . . . .
+                """),
+                img("""
+                    . . . . f f f f f f . . . . . . 
+                                . . . f 2 f e e e e f f . . . . 
+                                . . f 2 2 2 f e e e e f f . . . 
+                                . . f e e e e f f e e e f . . . 
+                                . f e 2 2 2 2 e e f f f f . . . 
+                                . f 2 e f f f f 2 2 2 e f . . . 
+                                . f f f e e e f f f f f f f . . 
+                                . f e e 4 4 f b e 4 4 e f f . . 
+                                . . f e d d f 1 4 d 4 e e f . . 
+                                . . . f d d d d 4 e e e f . . . 
+                                . . . f e 4 4 4 e e f f . . . . 
+                                . . . f 2 2 2 e d d 4 . . . . . 
+                                . . . f 2 2 2 e d d e . . . . . 
+                                . . . f 5 5 4 f e e f . . . . . 
+                                . . . . f f f f f f . . . . . . 
+                                . . . . . . f f f . . . . . . .
+                """),
+                img("""
+                    . . . . . . . . . . . . . . . . 
+                                . . . . f f f f f f . . . . . . 
+                                . . . f 2 f e e e e f f . . . . 
+                                . . f 2 2 2 f e e e e f f . . . 
+                                . . f e e e e f f e e e f . . . 
+                                . f e 2 2 2 2 e e f f f f . . . 
+                                . f 2 e f f f f 2 2 2 e f . . . 
+                                . f f f e e e f f f f f f f . . 
+                                . f e e 4 4 f b e 4 4 e f f . . 
+                                . . f e d d f 1 4 d 4 e e f . . 
+                                . . . f d d d d 4 e e e f . . . 
+                                . . . f e 4 4 4 e d d 4 . . . . 
+                                . . . f 2 2 2 2 e d d e . . . . 
+                                . . f f 5 5 4 4 f e e f . . . . 
+                                . . f f f f f f f f f f . . . . 
+                                . . . f f f . . . f f . . . . .
+                """)],
+            500,
+            False)
+controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
+
+def Level1():
+    global Character, Bruja2, DialogMode
+    sprites.destroy(Arrow2)
+    sprites.destroy(HelpButton)
+    sprites.destroy(PlayButton)
+    tiles.set_current_tilemap(tilemap("""
+        level4
+    """))
+    Character = sprites.create(img("""
+            . . . . . . f f f f . . . . . . 
+                    . . . . f f f 2 2 f f f . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f f f e e e e e e f f f . . 
+                    . . f f e 2 2 2 2 2 2 e e f . . 
+                    . . f e 2 f f f f f f 2 e f . . 
+                    . . f f f f e e e e f f f f . . 
+                    . f f e f b f 4 4 f b f e f f . 
+                    . f e e 4 1 f d d f 1 4 e e f . 
+                    . . f f f f d d d d d e e f . . 
+                    . f d d d d f 4 4 4 e e f . . . 
+                    . f b b b b f 2 2 2 2 f 4 e . . 
+                    . f b b b b f 2 2 2 2 f d 4 . . 
+                    . . f c c f 4 5 5 4 4 f 4 4 . . 
+                    . . . f f f f f f f f . . . . . 
+                    . . . . . f f . . f f . . . . .
+        """),
+        SpriteKind.player)
+    scene.camera_follow_sprite(Character)
+    Bruja2 = sprites.create(img("""
+            . . . . . . . c c . . . . . . . 
+                    . . . . . . c 5 c . . . . . . . 
+                    . . . . c c 5 5 5 c c c . . . . 
+                    . . c c c c 5 5 5 5 c b c c . . 
+                    . c b b 5 b 5 5 5 5 b 5 b b c . 
+                    . c b 5 5 b b 5 5 b b 5 5 b c . 
+                    . . c 5 5 5 b b b b 5 5 5 f . . 
+                    . . . f 5 5 5 5 5 5 5 5 f f . . 
+                    . . . . f e e e f b e e f f . . 
+                    . . . . f e b b f 1 b f f f . . 
+                    . . . . f b b b b b b f f . . . 
+                    . . . . . f e e e e f e e . . . 
+                    . . . . . f 5 b b e b b e . . . 
+                    . . . . f 5 5 5 5 e b b e . . . 
+                    . . . . c b 5 5 5 5 e e . . . . 
+                    . . . . . f f f f f f . . . . .
+        """),
+        SpriteKind.Bruja)
+    tiles.place_on_tile(Bruja2, tiles.get_tile_location(10, 12))
+    Bruja2.say_text("Bruja")
+    if teletransporte == False:
+        game.show_long_text("Lo primero que tienes que hacer es hablar con la bruja.",
+            DialogLayout.BOTTOM)
+    DialogMode = False
+
+def on_on_overlap2(sprite3, otherSprite2):
+    global Level, Existe
+    if otherSprite2 == PlayButton and controller.A.is_pressed():
+        Level = 1
+        Existe = True
+        Level_Controler()
+    if otherSprite2 == HelpButton and controller.A.is_pressed():
+        Level = 2
+        Level_Controler()
+sprites.on_overlap(SpriteKind.Arrow, SpriteKind.Button, on_on_overlap2)
+
+def on_overlap_tile(sprite4, location2):
+    global Level
+    if Level == 1:
+        if teletransporte == True:
+            Level = 3
+            Level_Controler()
+    if Level == 3:
+        if teletransporte == True:
+            Level = 4
+            Level_Controler()
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.collectible_insignia,
+    on_overlap_tile)
+
+def on_overlap_tile2(sprite2, location):
+    global DialogMode
+    DialogMode = True
+    
+    def on_start_cutscene2():
+        global DialogMode, Chest, teletransporte
+        story.show_player_choices("Cojer parte", "Salir")
+        if story.check_last_answer("Cojer parte"):
+            tiles.set_tile_at(location, sprites.dungeon.chest_open)
+            DialogMode = False
+            Chest += 1
+            info.set_score(Chest)
+            story.cancel_all_cutscenes()
+            if Chest == 4:
+                game.show_long_text("Ya tienes todas la partes de la llave, podras abrrir la puerta",
+                    DialogLayout.BOTTOM)
+                for value in tiles.get_tiles_by_type(assets.tile("""
+                    myTile135
+                """)):
+                    tiles.set_tile_at(value, assets.tile("""
+                        myTile128
+                    """))
+                    tiles.set_wall_at(value, False)
+                for value2 in tiles.get_tiles_by_type(assets.tile("""
+                    myTile138
+                """)):
+                    tiles.set_tile_at(value2, assets.tile("""
+                        myTile126
+                    """))
+                    tiles.set_wall_at(value2, False)
+                teletransporte = True
+        else:
+            DialogMode = False
+            story.cancel_all_cutscenes()
+    story.start_cutscene(on_start_cutscene2)
+    
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.chest_closed,
+    on_overlap_tile2)
+
+def on_right_pressed():
+    if Existe:
+        animation.run_image_animation(Character,
+            [img("""
+                    . . . . . . f f f f f f . . . . 
+                                . . . . f f e e e e f 2 f . . . 
+                                . . . f f e e e e f 2 2 2 f . . 
+                                . . . f e e e f f e e e e f . . 
+                                . . . f f f f e e 2 2 2 2 e f . 
+                                . . . f e 2 2 2 f f f f e 2 f . 
+                                . . f f f f f f f e e e f f f . 
+                                . . f f e 4 4 e b f 4 4 e e f . 
+                                . . f e e 4 d 4 1 f d d e f . . 
+                                . . . f e e e 4 d d d d f . . . 
+                                . . . . f f e e 4 4 4 e f . . . 
+                                . . . . . 4 d d e 2 2 2 f . . . 
+                                . . . . . e d d e 2 2 2 f . . . 
+                                . . . . . f e e f 4 5 5 f . . . 
+                                . . . . . . f f f f f f . . . . 
+                                . . . . . . . f f f . . . . . .
+                """),
+                img("""
+                    . . . . . . . . . . . . . . . . 
+                                . . . . . . f f f f f f . . . . 
+                                . . . . f f e e e e f 2 f . . . 
+                                . . . f f e e e e f 2 2 2 f . . 
+                                . . . f e e e f f e e e e f . . 
+                                . . . f f f f e e 2 2 2 2 e f . 
+                                . . . f e 2 2 2 f f f f e 2 f . 
+                                . . f f f f f f f e e e f f f . 
+                                . . f f e 4 4 e b f 4 4 e e f . 
+                                . . f e e 4 d 4 1 f d d e f . . 
+                                . . . f e e e e e d d d f . . . 
+                                . . . . . f 4 d d e 4 e f . . . 
+                                . . . . . f e d d e 2 2 f . . . 
+                                . . . . f f f e e f 5 5 f f . . 
+                                . . . . f f f f f f f f f f . . 
+                                . . . . . f f . . . f f f . . .
+                """),
+                img("""
+                    . . . . . . f f f f f f . . . . 
+                                . . . . f f e e e e f 2 f . . . 
+                                . . . f f e e e e f 2 2 2 f . . 
+                                . . . f e e e f f e e e e f . . 
+                                . . . f f f f e e 2 2 2 2 e f . 
+                                . . . f e 2 2 2 f f f f e 2 f . 
+                                . . f f f f f f f e e e f f f . 
+                                . . f f e 4 4 e b f 4 4 e e f . 
+                                . . f e e 4 d 4 1 f d d e f . . 
+                                . . . f e e e 4 d d d d f . . . 
+                                . . . . f f e e 4 4 4 e f . . . 
+                                . . . . . 4 d d e 2 2 2 f . . . 
+                                . . . . . e d d e 2 2 2 f . . . 
+                                . . . . . f e e f 4 5 5 f . . . 
+                                . . . . . . f f f f f f . . . . 
+                                . . . . . . . f f f . . . . . .
+                """),
+                img("""
+                    . . . . . . . . . . . . . . . . 
+                                . . . . . . f f f f f f . . . . 
+                                . . . . f f e e e e f 2 f . . . 
+                                . . . f f e e e e f 2 2 2 f . . 
+                                . . . f e e e f f e e e e f . . 
+                                . . . f f f f e e 2 2 2 2 e f . 
+                                . . . f e 2 2 2 f f f f e 2 f . 
+                                . . f f f f f f f e e e f f f . 
+                                . . f f e 4 4 e b f 4 4 e e f . 
+                                . . f e e 4 d 4 1 f d d e f . . 
+                                . . . f e e e 4 d d d d f . . . 
+                                . . . . 4 d d e 4 4 4 e f . . . 
+                                . . . . e d d e 2 2 2 2 f . . . 
+                                . . . . f e e f 4 4 5 5 f f . . 
+                                . . . . f f f f f f f f f f . . 
+                                . . . . . f f . . . f f f . . .
+                """)],
+            500,
+            False)
+controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
+
+def Help():
+    sprites.destroy(Arrow2)
+    sprites.destroy(HelpButton)
+    sprites.destroy(PlayButton)
+
+def on_down_pressed():
+    if Existe:
         animation.run_image_animation(Character,
             [img("""
                     . . . . . . f f f f . . . . . . 
@@ -183,99 +514,8 @@ def wolk():
                 """)],
             500,
             False)
-def Level_Controler():
-    if Level == 0:
-        Menu()
-    if Level == 1:
-        Level1()
-    if Level == 2:
-        Help()
-    if Level == 3:
-        Level2()
-def Level2():
-    sprites.destroy(PlayButton)
-    sprites.destroy(HelpButton)
-    sprites.destroy(Arrow2)
-    sprites.destroy(Bruja2)
-    tiles.set_current_tilemap(tilemap("""
-        level11
-    """))
-def Level1():
-    global Character, Bruja2
-    wolk()
-    sprites.destroy(Arrow2)
-    sprites.destroy(HelpButton)
-    sprites.destroy(PlayButton)
-    tiles.set_current_tilemap(tilemap("""
-        level4
-    """))
-    Character = sprites.create(img("""
-            . . . . . . f f f f . . . . . . 
-                    . . . . f f f 2 2 f f f . . . . 
-                    . . . f f f 2 2 2 2 f f f . . . 
-                    . . f f f e e e e e e f f f . . 
-                    . . f f e 2 2 2 2 2 2 e e f . . 
-                    . . f e 2 f f f f f f 2 e f . . 
-                    . . f f f f e e e e f f f f . . 
-                    . f f e f b f 4 4 f b f e f f . 
-                    . f e e 4 1 f d d f 1 4 e e f . 
-                    . . f f f f d d d d d e e f . . 
-                    . f d d d d f 4 4 4 e e f . . . 
-                    . f b b b b f 2 2 2 2 f 4 e . . 
-                    . f b b b b f 2 2 2 2 f d 4 . . 
-                    . . f c c f 4 5 5 4 4 f 4 4 . . 
-                    . . . f f f f f f f f . . . . . 
-                    . . . . . f f . . f f . . . . .
-        """),
-        SpriteKind.player)
-    controller.move_sprite(Character)
-    scene.camera_follow_sprite(Character)
-    Bruja2 = sprites.create(img("""
-            . . . . . . . c c . . . . . . . 
-                    . . . . . . c 5 c . . . . . . . 
-                    . . . . c c 5 5 5 c c c . . . . 
-                    . . c c c c 5 5 5 5 c b c c . . 
-                    . c b b 5 b 5 5 5 5 b 5 b b c . 
-                    . c b 5 5 b b 5 5 b b 5 5 b c . 
-                    . . c 5 5 5 b b b b 5 5 5 f . . 
-                    . . . f 5 5 5 5 5 5 5 5 f f . . 
-                    . . . . f e e e f b e e f f . . 
-                    . . . . f e b b f 1 b f f f . . 
-                    . . . . f b b b b b b f f . . . 
-                    . . . . . f e e e e f e e . . . 
-                    . . . . . f 5 b b e b b e . . . 
-                    . . . . f 5 5 5 5 e b b e . . . 
-                    . . . . c b 5 5 5 5 e e . . . . 
-                    . . . . . f f f f f f . . . . .
-        """),
-        SpriteKind.Bruja)
-    tiles.place_on_tile(Bruja2, tiles.get_tile_location(10, 12))
-    if teletransporte == False:
-        story.print_character_text("Lo primero que tienes que hacer es hablar con la bruja.")
+controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
-def on_on_overlap2(sprite3, otherSprite2):
-    global Level
-    if otherSprite2 == PlayButton and controller.A.is_pressed():
-        Level = 1
-        Level_Controler()
-    if otherSprite2 == HelpButton and controller.A.is_pressed():
-        Level = 2
-        Level_Controler()
-sprites.on_overlap(SpriteKind.Arrow, SpriteKind.Button, on_on_overlap2)
-
-def on_overlap_tile(sprite4, location2):
-    global Level
-    if teletransporte == True:
-        Level = 3
-        Level_Controler()
-scene.on_overlap_tile(SpriteKind.player,
-    sprites.dungeon.collectible_insignia,
-    on_overlap_tile)
-
-def Help():
-    sprites.destroy(Arrow2)
-    sprites.destroy(HelpButton)
-    sprites.destroy(PlayButton)
 def Menu():
     global PlayButton, HelpButton, Arrow2
     scene.set_background_image(img("""
@@ -417,17 +657,17 @@ def Menu():
     controller.move_sprite(Arrow2)
     Arrow2.set_bounce_on_wall(True)
 
-def on_overlap_tile2(sprite2, location):
-    tiles.set_tile_at(location, sprites.dungeon.floor_dark0)
-    for value in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
-        tiles.set_tile_at(value, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value, False)
-    for value2 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
-        tiles.set_tile_at(value2, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value2, False)
-    for value3 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
+def on_overlap_tile3(sprite22, location3):
+    tiles.set_tile_at(location3, sprites.dungeon.floor_dark0)
+    for value3 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
         tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
         tiles.set_wall_at(value3, False)
+    for value22 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
+        tiles.set_tile_at(value22, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value22, False)
+    for value32 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
+        tiles.set_tile_at(value32, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value32, False)
     for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
         tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
         tiles.set_wall_at(value4, False)
@@ -435,16 +675,26 @@ scene.on_overlap_tile(SpriteKind.player,
     assets.tile("""
         myTile
     """),
-    on_overlap_tile2)
+    on_overlap_tile3)
 
+Chest = 0
 Bruja2: Sprite = None
 Arrow2: Sprite = None
 HelpButton: Sprite = None
 PlayButton: Sprite = None
 Character: Sprite = None
+Existe = False
 teletransporte = False
 PlayerName = ""
+DialogMode = False
 Level = 0
 game.splash("Cazador De Recuerdos")
 Level = 0
 Level_Controler()
+
+def on_forever():
+    if DialogMode == False:
+        controller.move_sprite(Character)
+    elif DialogMode == True:
+        controller.move_sprite(Character, 0, 0)
+forever(on_forever)

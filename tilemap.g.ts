@@ -505,6 +505,44 @@ namespace myTiles {
 222222222222222222222222222222222222....22222222222222222222222222
 222222222222222222222222222222222222222222222222222222222222222222
 `, [myTiles.transparency16,myTiles.tile2,myTiles.tile3,myTiles.tile4,myTiles.tile5,myTiles.tile6,myTiles.tile8,myTiles.tile9,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile14,myTiles.tile15,myTiles.tile16,myTiles.tile17,myTiles.tile19,myTiles.tile20,myTiles.tile22,myTiles.tile23,myTiles.tile24,myTiles.tile25,myTiles.tile26,myTiles.tile18,myTiles.tile27,myTiles.tile28,myTiles.tile29,myTiles.tile30,myTiles.tile31,myTiles.tile32,myTiles.tile33,myTiles.tile34,myTiles.tile35,myTiles.tile36,myTiles.tile37,myTiles.tile38,myTiles.tile39,myTiles.tile40,myTiles.tile41,myTiles.tile42,myTiles.tile43,myTiles.tile44,myTiles.tile45,myTiles.tile46,myTiles.tile47,myTiles.tile49,myTiles.tile50,myTiles.tile51,myTiles.tile52,myTiles.tile53,myTiles.tile54,myTiles.tile55,myTiles.tile56,myTiles.tile58,myTiles.tile59,myTiles.tile60,myTiles.tile61,myTiles.tile62,myTiles.tile63,myTiles.tile64,myTiles.tile57,myTiles.tile65,myTiles.tile66,myTiles.tile67,myTiles.tile68,myTiles.tile69,myTiles.tile70,myTiles.tile71,myTiles.tile72,myTiles.tile73,myTiles.tile74,myTiles.tile75,myTiles.tile77,myTiles.tile76,myTiles.tile78,myTiles.tile79,myTiles.tile80,myTiles.tile81,myTiles.tile82,myTiles.tile83,myTiles.tile84,myTiles.tile85,myTiles.tile86,myTiles.tile87,myTiles.tile88,myTiles.tile89,myTiles.tile90,myTiles.tile91,myTiles.tile93,myTiles.tile94,myTiles.tile92,myTiles.tile95,myTiles.tile48,myTiles.tile96,myTiles.tile97,myTiles.tile98,myTiles.tile99,myTiles.tile100,myTiles.tile102,myTiles.tile103,myTiles.tile104,myTiles.tile105,myTiles.tile106,myTiles.tile107,myTiles.tile108,myTiles.tile111,myTiles.tile112,myTiles.tile101,myTiles.tile109,myTiles.tile113,myTiles.tile114,myTiles.tile115,myTiles.tile116,myTiles.tile117,myTiles.tile118,myTiles.tile119,myTiles.tile120,myTiles.tile121,myTiles.tile122,myTiles.tile123,myTiles.tile124,myTiles.tile125,myTiles.tile126,myTiles.tile127,myTiles.tile128,myTiles.tile129,myTiles.tile130,myTiles.tile132,myTiles.tile133,myTiles.tile134,myTiles.tile135,myTiles.tile136,myTiles.tile137,myTiles.tile139,myTiles.tile140,myTiles.tile143,myTiles.tile144,myTiles.tile145,myTiles.tile146,myTiles.tile147,myTiles.tile148,myTiles.tile149,myTiles.tile150,myTiles.tile151,myTiles.tile152,myTiles.tile153,myTiles.tile154,sprites.dungeon.chestClosed,sprites.dungeon.collectibleInsignia], TileScale.Sixteen);
+            case "level7":
+            case "level7":return tiles.createTilemap(hex`1000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`, img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, [myTiles.transparency16], TileScale.Sixteen);
+            case "level9":
+            case "level9":return tiles.createTilemap(hex`1000100001010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101`, img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, [myTiles.transparency16,sprites.castle.tileGrass1], TileScale.Sixteen);
         }
         return null;
     })

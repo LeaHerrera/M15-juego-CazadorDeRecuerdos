@@ -139,7 +139,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function Level3 () {
-	
+    tiles.setCurrentTilemap(tilemap`level9`)
+    Character.setPosition(1, 14)
 }
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Existe) {
@@ -280,22 +281,26 @@ sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite3, otherS
     }
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite4, location2) {
-    if (teletransporte == true) {
-        if (Level == 1) {
+    if (Level == 1) {
+        if (teletransporte == true) {
             Level = 3
             Level_Controler()
         }
-        if (Level == 3) {
+    }
+    if (Level == 3) {
+        if (teletransporte == true) {
             Level = 4
             Level_Controler()
         }
     }
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+    DialogMode = true
     story.startCutscene(function () {
         story.showPlayerChoices("Cojer parte", "Salir")
         if (story.checkLastAnswer("Cojer parte")) {
             tiles.setTileAt(location, sprites.dungeon.chestOpen)
+            DialogMode = false
             Chest += 1
             info.setScore(Chest)
             story.cancelAllCutscenes()
@@ -309,9 +314,10 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
                     tiles.setTileAt(value, assets.tile`myTile126`)
                     tiles.setWallAt(value, false)
                 }
-                teletransporte = false
+                teletransporte = true
             }
         } else {
+            DialogMode = false
             story.cancelAllCutscenes()
         }
     })
