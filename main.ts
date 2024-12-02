@@ -4,6 +4,7 @@ namespace SpriteKind {
     export const Bruja = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Bruja, function (sprite, otherSprite) {
+    DialogMode = true
     story.startCutscene(function () {
         story.showPlayerChoices("Hablar con la Bruja", "Salir")
         if (story.checkLastAnswer("Hablar con la Bruja")) {
@@ -15,12 +16,93 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bruja, function (sprite, otherSp
             story.printCharacterText("el tiempo, y cada decisión puede acercarte o alejarte de la verdad.", "Bruja")
             story.printCharacterText("Para seguir con la historia vete al transportador", "Bruja")
             teletransporte = true
+            DialogMode = false
             story.cancelAllCutscenes()
         }
         if (story.checkLastAnswer("Salir")) {
             story.cancelAllCutscenes()
+            DialogMode = false
         }
     })
+    pause(2000)
+})
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (Existe) {
+        animation.runImageAnimation(
+        Character,
+        [img`
+            . . . . . . f f f f . . . . . . 
+            . . . . f f e e e e f f . . . . 
+            . . . f e e e f f e e e f . . . 
+            . . f f f f f 2 2 f f f f f . . 
+            . . f f e 2 e 2 2 e 2 e f f . . 
+            . . f e 2 f 2 f f 2 f 2 e f . . 
+            . . f f f 2 2 e e 2 2 f f f . . 
+            . f f e f 2 f e e f 2 f e f f . 
+            . f e e f f e e e e f e e e f . 
+            . . f e e e e e e e e e e f . . 
+            . . . f e e e e e e e e f . . . 
+            . . e 4 f f f f f f f f 4 e . . 
+            . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+            . . 4 4 f 4 4 4 4 4 4 f 4 4 . . 
+            . . . . . f f f f f f . . . . . 
+            . . . . . f f . . f f . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . f f f f . . . . . . 
+            . . . . f f e e e e f f . . . . 
+            . . . f e e e f f e e e f . . . 
+            . . . f f f f 2 2 f f f f . . . 
+            . . f f e 2 e 2 2 e 2 e f f . . 
+            . . f e 2 f 2 f f f 2 f e f . . 
+            . . f f f 2 f e e 2 2 f f f . . 
+            . . f e 2 f f e e 2 f e e f . . 
+            . f f e f f e e e f e e e f f . 
+            . f f e e e e e e e e e e f f . 
+            . . . f e e e e e e e e f . . . 
+            . . . e f f f f f f f f 4 e . . 
+            . . . 4 f 2 2 2 2 2 e d d 4 . . 
+            . . . e f f f f f f e e 4 . . . 
+            . . . . f f f . . . . . . . . . 
+            `,img`
+            . . . . . . f f f f . . . . . . 
+            . . . . f f e e e e f f . . . . 
+            . . . f e e e f f e e e f . . . 
+            . . f f f f f 2 2 f f f f f . . 
+            . . f f e 2 e 2 2 e 2 e f f . . 
+            . . f e 2 f 2 f f 2 f 2 e f . . 
+            . . f f f 2 2 e e 2 2 f f f . . 
+            . f f e f 2 f e e f 2 f e f f . 
+            . f e e f f e e e e f e e e f . 
+            . . f e e e e e e e e e e f . . 
+            . . . f e e e e e e e e f . . . 
+            . . e 4 f f f f f f f f 4 e . . 
+            . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+            . . 4 4 f 4 4 4 4 4 4 f 4 4 . . 
+            . . . . . f f f f f f . . . . . 
+            . . . . . f f . . f f . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . f f f f . . . . . . 
+            . . . . f f e e e e f f . . . . 
+            . . . f e e e f f e e e f . . . 
+            . . . f f f f 2 2 f f f f . . . 
+            . . f f e 2 e 2 2 e 2 e f f . . 
+            . . f e f 2 f f f 2 f 2 e f . . 
+            . . f f f 2 2 e e f 2 f f f . . 
+            . . f e e f 2 e e f f 2 e f . . 
+            . f f e e e f e e e f f e f f . 
+            . f f e e e e e e e e e e f f . 
+            . . . f e e e e e e e e f . . . 
+            . . e 4 f f f f f f f f e . . . 
+            . . 4 d d e 2 2 2 2 2 f 4 . . . 
+            . . . 4 e e f f f f f f e . . . 
+            . . . . . . . . . f f f . . . . 
+            `],
+        500,
+        true
+        )
+    }
 })
 function Level_Controler () {
     if (Level == 0) {
@@ -35,6 +117,9 @@ function Level_Controler () {
     if (Level == 3) {
         Level2()
     }
+    if (Level == 4) {
+        Level3()
+    }
 }
 function Level2 () {
     sprites.destroy(PlayButton)
@@ -42,7 +127,97 @@ function Level2 () {
     sprites.destroy(Arrow2)
     sprites.destroy(Bruja2)
     tiles.setCurrentTilemap(tilemap`level11`)
+    game.showLongText("Este es el primer nivel, encuentra todos los cofres y abrelos para obtener", DialogLayout.Bottom)
+    game.showLongText("la llave que le abrrira la puerta del nivel 2", DialogLayout.Bottom)
+    game.showLongText("En cada cofre encontarars una parte de la llave", DialogLayout.Bottom)
+    Chest = 0
 }
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (DialogMode == true) {
+        story.clearAllText()
+    }
+})
+function Level3 () {
+	
+}
+controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (Existe) {
+        animation.runImageAnimation(
+        Character,
+        [img`
+            . . . . f f f f f f . . . . . . 
+            . . . f 2 f e e e e f f . . . . 
+            . . f 2 2 2 f e e e e f f . . . 
+            . . f e e e e f f e e e f . . . 
+            . f e 2 2 2 2 e e f f f f . . . 
+            . f 2 e f f f f 2 2 2 e f . . . 
+            . f f f e e e f f f f f f f . . 
+            . f e e 4 4 f b e 4 4 e f f . . 
+            . . f e d d f 1 4 d 4 e e f . . 
+            . . . f d d d d 4 e e e f . . . 
+            . . . f e 4 4 4 e e f f . . . . 
+            . . . f 2 2 2 e d d 4 . . . . . 
+            . . . f 2 2 2 e d d e . . . . . 
+            . . . f 5 5 4 f e e f . . . . . 
+            . . . . f f f f f f . . . . . . 
+            . . . . . . f f f . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f . . . . . . 
+            . . . f 2 f e e e e f f . . . . 
+            . . f 2 2 2 f e e e e f f . . . 
+            . . f e e e e f f e e e f . . . 
+            . f e 2 2 2 2 e e f f f f . . . 
+            . f 2 e f f f f 2 2 2 e f . . . 
+            . f f f e e e f f f f f f f . . 
+            . f e e 4 4 f b e 4 4 e f f . . 
+            . . f e d d f 1 4 d 4 e e f . . 
+            . . . f d d d e e e e e f . . . 
+            . . . f e 4 e d d 4 f . . . . . 
+            . . . f 2 2 e d d e f . . . . . 
+            . . f f 5 5 f e e f f f . . . . 
+            . . f f f f f f f f f f . . . . 
+            . . . f f f . . . f f . . . . . 
+            `,img`
+            . . . . f f f f f f . . . . . . 
+            . . . f 2 f e e e e f f . . . . 
+            . . f 2 2 2 f e e e e f f . . . 
+            . . f e e e e f f e e e f . . . 
+            . f e 2 2 2 2 e e f f f f . . . 
+            . f 2 e f f f f 2 2 2 e f . . . 
+            . f f f e e e f f f f f f f . . 
+            . f e e 4 4 f b e 4 4 e f f . . 
+            . . f e d d f 1 4 d 4 e e f . . 
+            . . . f d d d d 4 e e e f . . . 
+            . . . f e 4 4 4 e e f f . . . . 
+            . . . f 2 2 2 e d d 4 . . . . . 
+            . . . f 2 2 2 e d d e . . . . . 
+            . . . f 5 5 4 f e e f . . . . . 
+            . . . . f f f f f f . . . . . . 
+            . . . . . . f f f . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f . . . . . . 
+            . . . f 2 f e e e e f f . . . . 
+            . . f 2 2 2 f e e e e f f . . . 
+            . . f e e e e f f e e e f . . . 
+            . f e 2 2 2 2 e e f f f f . . . 
+            . f 2 e f f f f 2 2 2 e f . . . 
+            . f f f e e e f f f f f f f . . 
+            . f e e 4 4 f b e 4 4 e f f . . 
+            . . f e d d f 1 4 d 4 e e f . . 
+            . . . f d d d d 4 e e e f . . . 
+            . . . f e 4 4 4 e d d 4 . . . . 
+            . . . f 2 2 2 2 e d d e . . . . 
+            . . f f 5 5 4 4 f e e f . . . . 
+            . . f f f f f f f f f f . . . . 
+            . . . f f f . . . f f . . . . . 
+            `],
+        500,
+        true
+        )
+    }
+})
 function Level1 () {
     sprites.destroy(Arrow2)
     sprites.destroy(HelpButton)
@@ -66,7 +241,6 @@ function Level1 () {
         . . . f f f f f f f f . . . . . 
         . . . . . f f . . f f . . . . . 
         `, SpriteKind.Player)
-    controller.moveSprite(Character)
     scene.cameraFollowSprite(Character)
     Bruja2 = sprites.create(img`
         . . . . . . . c c . . . . . . . 
@@ -87,13 +261,16 @@ function Level1 () {
         . . . . . f f f f f f . . . . . 
         `, SpriteKind.Bruja)
     tiles.placeOnTile(Bruja2, tiles.getTileLocation(10, 12))
+    Bruja2.sayText("Bruja")
     if (teletransporte == false) {
-        story.printCharacterText("Lo primero que tienes que hacer es hablar con la bruja.")
+        game.showLongText("Lo primero que tienes que hacer es hablar con la bruja.", DialogLayout.Bottom)
     }
+    DialogMode = false
 }
 sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite3, otherSprite2) {
     if (otherSprite2 == PlayButton && controller.A.isPressed()) {
         Level = 1
+        Existe = true
         Level_Controler()
     }
     if (otherSprite2 == HelpButton && controller.A.isPressed()) {
@@ -103,8 +280,108 @@ sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite3, otherS
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite4, location2) {
     if (teletransporte == true) {
-        Level = 3
-        Level_Controler()
+        if (Level == 1) {
+            Level = 3
+            Level_Controler()
+        }
+        if (Level == 3) {
+            Level = 4
+            Level_Controler()
+        }
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+    story.startCutscene(function () {
+        story.showPlayerChoices("Cojer parte", "Salir")
+        if (story.checkLastAnswer("Cojer parte")) {
+            tiles.setTileAt(location, sprites.dungeon.chestOpen)
+            Chest += 1
+            info.setScore(Chest)
+            story.cancelAllCutscenes()
+            if (Chest == 4) {
+                game.showLongText("Ya tienes todas la partes de la llave, podras abrrir la puerta", DialogLayout.Bottom)
+            }
+        } else {
+            story.cancelAllCutscenes()
+        }
+    })
+})
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (Existe) {
+        animation.runImageAnimation(
+        Character,
+        [img`
+            . . . . . . f f f f f f . . . . 
+            . . . . f f e e e e f 2 f . . . 
+            . . . f f e e e e f 2 2 2 f . . 
+            . . . f e e e f f e e e e f . . 
+            . . . f f f f e e 2 2 2 2 e f . 
+            . . . f e 2 2 2 f f f f e 2 f . 
+            . . f f f f f f f e e e f f f . 
+            . . f f e 4 4 e b f 4 4 e e f . 
+            . . f e e 4 d 4 1 f d d e f . . 
+            . . . f e e e 4 d d d d f . . . 
+            . . . . f f e e 4 4 4 e f . . . 
+            . . . . . 4 d d e 2 2 2 f . . . 
+            . . . . . e d d e 2 2 2 f . . . 
+            . . . . . f e e f 4 5 5 f . . . 
+            . . . . . . f f f f f f . . . . 
+            . . . . . . . f f f . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . f f f f f f . . . . 
+            . . . . f f e e e e f 2 f . . . 
+            . . . f f e e e e f 2 2 2 f . . 
+            . . . f e e e f f e e e e f . . 
+            . . . f f f f e e 2 2 2 2 e f . 
+            . . . f e 2 2 2 f f f f e 2 f . 
+            . . f f f f f f f e e e f f f . 
+            . . f f e 4 4 e b f 4 4 e e f . 
+            . . f e e 4 d 4 1 f d d e f . . 
+            . . . f e e e e e d d d f . . . 
+            . . . . . f 4 d d e 4 e f . . . 
+            . . . . . f e d d e 2 2 f . . . 
+            . . . . f f f e e f 5 5 f f . . 
+            . . . . f f f f f f f f f f . . 
+            . . . . . f f . . . f f f . . . 
+            `,img`
+            . . . . . . f f f f f f . . . . 
+            . . . . f f e e e e f 2 f . . . 
+            . . . f f e e e e f 2 2 2 f . . 
+            . . . f e e e f f e e e e f . . 
+            . . . f f f f e e 2 2 2 2 e f . 
+            . . . f e 2 2 2 f f f f e 2 f . 
+            . . f f f f f f f e e e f f f . 
+            . . f f e 4 4 e b f 4 4 e e f . 
+            . . f e e 4 d 4 1 f d d e f . . 
+            . . . f e e e 4 d d d d f . . . 
+            . . . . f f e e 4 4 4 e f . . . 
+            . . . . . 4 d d e 2 2 2 f . . . 
+            . . . . . e d d e 2 2 2 f . . . 
+            . . . . . f e e f 4 5 5 f . . . 
+            . . . . . . f f f f f f . . . . 
+            . . . . . . . f f f . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . f f f f f f . . . . 
+            . . . . f f e e e e f 2 f . . . 
+            . . . f f e e e e f 2 2 2 f . . 
+            . . . f e e e f f e e e e f . . 
+            . . . f f f f e e 2 2 2 2 e f . 
+            . . . f e 2 2 2 f f f f e 2 f . 
+            . . f f f f f f f e e e f f f . 
+            . . f f e 4 4 e b f 4 4 e e f . 
+            . . f e e 4 d 4 1 f d d e f . . 
+            . . . f e e e 4 d d d d f . . . 
+            . . . . 4 d d e 4 4 4 e f . . . 
+            . . . . e d d e 2 2 2 2 f . . . 
+            . . . . f e e f 4 4 5 5 f f . . 
+            . . . . f f f f f f f f f f . . 
+            . . . . . f f . . . f f f . . . 
+            `],
+        500,
+        true
+        )
     }
 })
 function Help () {
@@ -112,6 +389,84 @@ function Help () {
     sprites.destroy(HelpButton)
     sprites.destroy(PlayButton)
 }
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (Existe) {
+        animation.runImageAnimation(
+        Character,
+        [img`
+            . . . . . . f f f f . . . . . . 
+            . . . . f f f 2 2 f f f . . . . 
+            . . . f f f 2 2 2 2 f f f . . . 
+            . . f f f e e e e e e f f f . . 
+            . . f f e 2 2 2 2 2 2 e e f . . 
+            . . f e 2 f f f f f f 2 e f . . 
+            . . f f f f e e e e f f f f . . 
+            . f f e f b f 4 4 f b f e f f . 
+            . f e e 4 1 f d d f 1 4 e e f . 
+            . . f e e d d d d d d e e f . . 
+            . . . f e e 4 4 4 4 e e f . . . 
+            . . e 4 f 2 2 2 2 2 2 f 4 e . . 
+            . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+            . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
+            . . . . . f f f f f f . . . . . 
+            . . . . . f f . . f f . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . f f f f . . . . . . 
+            . . . . f f f 2 2 f f f . . . . 
+            . . . f f f 2 2 2 2 f f f . . . 
+            . . f f f e e e e e e f f f . . 
+            . . f f e 2 2 2 2 2 2 e e f . . 
+            . f f e 2 f f f f f f 2 e f f . 
+            . f f f f f e e e e f f f f f . 
+            . . f e f b f 4 4 f b f e f . . 
+            . . f e 4 1 f d d f 1 4 e f . . 
+            . . . f e 4 d d d d 4 e f e . . 
+            . . f e f 2 2 2 2 e d d 4 e . . 
+            . . e 4 f 2 2 2 2 e d d e . . . 
+            . . . . f 4 4 5 5 f e e . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . . f f f . . . . . . . . . 
+            `,img`
+            . . . . . . f f f f . . . . . . 
+            . . . . f f f 2 2 f f f . . . . 
+            . . . f f f 2 2 2 2 f f f . . . 
+            . . f f f e e e e e e f f f . . 
+            . . f f e 2 2 2 2 2 2 e e f . . 
+            . . f e 2 f f f f f f 2 e f . . 
+            . . f f f f e e e e f f f f . . 
+            . f f e f b f 4 4 f b f e f f . 
+            . f e e 4 1 f d d f 1 4 e e f . 
+            . . f e e d d d d d d e e f . . 
+            . . . f e e 4 4 4 4 e e f . . . 
+            . . e 4 f 2 2 2 2 2 2 f 4 e . . 
+            . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+            . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
+            . . . . . f f f f f f . . . . . 
+            . . . . . f f . . f f . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . f f f f . . . . . . 
+            . . . . f f f 2 2 f f f . . . . 
+            . . . f f f 2 2 2 2 f f f . . . 
+            . . f f f e e e e e e f f f . . 
+            . . f e e 2 2 2 2 2 2 e f f . . 
+            . f f e 2 f f f f f f 2 e f f . 
+            . f f f f f e e e e f f f f f . 
+            . . f e f b f 4 4 f b f e f . . 
+            . . f e 4 1 f d d f 1 4 e f . . 
+            . . e f e 4 d d d d 4 e f . . . 
+            . . e 4 d d e 2 2 2 2 f e f . . 
+            . . . e d d e 2 2 2 2 f 4 e . . 
+            . . . . e e f 5 5 4 4 f . . . . 
+            . . . . . f f f f f f f . . . . 
+            . . . . . . . . . f f f . . . . 
+            `],
+        500,
+        true
+        )
+    }
+})
 function Menu () {
     scene.setBackgroundImage(img`
         ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -268,14 +623,24 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite2, l
         tiles.setWallAt(value4, false)
     }
 })
-let Character: Sprite = null
+let Chest = 0
 let Bruja2: Sprite = null
 let Arrow2: Sprite = null
 let HelpButton: Sprite = null
 let PlayButton: Sprite = null
+let Character: Sprite = null
+let Existe = false
 let teletransporte = false
 let PlayerName = ""
+let DialogMode = false
 let Level = 0
 game.splash("Cazador De Recuerdos")
 Level = 0
 Level_Controler()
+forever(function () {
+    if (DialogMode == false) {
+        controller.moveSprite(Character)
+    } else if (DialogMode == true) {
+        controller.moveSprite(Character, 0, 0)
+    }
+})
