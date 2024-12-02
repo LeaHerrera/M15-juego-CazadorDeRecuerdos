@@ -100,7 +100,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . f f f . . . . 
             `],
         500,
-        true
+        false
         )
     }
 })
@@ -115,6 +115,7 @@ function Level_Controler () {
         Help()
     }
     if (Level == 3) {
+        teletransporte = false
         Level2()
     }
     if (Level == 4) {
@@ -214,7 +215,7 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . f f f . . . f f . . . . . 
             `],
         500,
-        true
+        false
         )
     }
 })
@@ -300,6 +301,15 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
             story.cancelAllCutscenes()
             if (Chest == 4) {
                 game.showLongText("Ya tienes todas la partes de la llave, podras abrrir la puerta", DialogLayout.Bottom)
+                for (let value of tiles.getTilesByType(assets.tile`myTile135`)) {
+                    tiles.setTileAt(value, assets.tile`myTile128`)
+                    tiles.setWallAt(value, false)
+                }
+                for (let value of tiles.getTilesByType(assets.tile`myTile138`)) {
+                    tiles.setTileAt(value, assets.tile`myTile126`)
+                    tiles.setWallAt(value, false)
+                }
+                teletransporte = false
             }
         } else {
             story.cancelAllCutscenes()
@@ -380,7 +390,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . f f . . . f f f . . . 
             `],
         500,
-        true
+        false
         )
     }
 })
@@ -463,7 +473,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . f f f . . . . 
             `],
         500,
-        true
+        false
         )
     }
 })
