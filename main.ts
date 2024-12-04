@@ -9,8 +9,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bruja, function (sprite, otherSp
         story.showPlayerChoices("Hablar con la Bruja", "Salir")
         if (story.checkLastAnswer("Hablar con la Bruja")) {
             PlayerName = game.askForString("Como te llamas aventurero?")
-            story.printCharacterText(" Hola " + PlayerName + ". Eres un androide defectuoso, creado para una tarea que ya has olvidado.", "Bruja")
-            story.printCharacterText("Tu memoria se ha perdido, fragmentada en pedazos, y ahora viajas entre diferentes épocas de la humanidad para reconstruirla.", "Bruja")
+            story.printCharacterText(" Hola " + PlayerName + ". Eres un aventurero que ha perdido su memoria", "Bruja")
+            story.printCharacterText("Y ahora viajas entre diferentes épocas de la humanidad para reconstruirla.", "Bruja")
             story.printCharacterText("Cada era que atraviesas está llena de pistas, enigmas y personas que, aunque no lo sepan, tienen fragmentos de tu historia.", "Bruja")
             story.printCharacterText("Debes aprender a confiar en los demás, incluso cuando las piezas de tu identidad estén dispersas en", "Bruja")
             story.printCharacterText("el tiempo, y cada decisión puede acercarte o alejarte de la verdad.", "Bruja")
@@ -289,8 +289,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
     }
     if (Level == 3) {
         if (teletransporte == true) {
-            Level = 4
-            Level_Controler()
+            game.gameOver(true)
         }
     }
 })
