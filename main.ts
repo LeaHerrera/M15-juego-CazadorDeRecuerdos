@@ -112,19 +112,12 @@ function Level_Controler () {
         Level1()
     }
     if (Level == 2) {
-        Help()
-    }
-    if (Level == 3) {
         teletransporte = false
         Level2()
-    }
-    if (Level == 4) {
-        Level3()
     }
 }
 function Level2 () {
     sprites.destroy(PlayButton)
-    sprites.destroy(HelpButton)
     sprites.destroy(Arrow2)
     sprites.destroy(Bruja2)
     tiles.setCurrentTilemap(tilemap`level11`)
@@ -138,10 +131,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         story.clearAllText()
     }
 })
-function Level3 () {
-    tiles.setCurrentTilemap(tilemap`level9`)
-    Character.setPosition(1, 14)
-}
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Existe) {
         animation.runImageAnimation(
@@ -222,7 +211,6 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 function Level1 () {
     sprites.destroy(Arrow2)
-    sprites.destroy(HelpButton)
     sprites.destroy(PlayButton)
     tiles.setCurrentTilemap(tilemap`level4`)
     Character = sprites.create(img`
@@ -270,6 +258,7 @@ function Level1 () {
     DialogMode = false
 }
 sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite3, otherSprite2) {
+    let HelpButton: Sprite = null
     if (otherSprite2 == PlayButton && controller.A.isPressed()) {
         Level = 1
         Existe = true
@@ -283,13 +272,15 @@ sprites.onOverlap(SpriteKind.Arrow, SpriteKind.Button, function (sprite3, otherS
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite4, location2) {
     if (Level == 1) {
         if (teletransporte == true) {
-            Level = 3
+            Level = 2
             Level_Controler()
         }
     }
-    if (Level == 3) {
+    if (Level == 2) {
         if (teletransporte == true) {
-            game.gameOver(true)
+            game.showLongText("Tu verdadero nombre es Elian, y eres un científico del futuro....", DialogLayout.Bottom)
+            game.showLongText("Continuara..........", DialogLayout.Bottom)
+            game.reset()
         }
     }
 })
@@ -399,11 +390,6 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         )
     }
 })
-function Help () {
-    sprites.destroy(Arrow2)
-    sprites.destroy(HelpButton)
-    sprites.destroy(PlayButton)
-}
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Existe) {
         animation.runImageAnimation(
@@ -579,25 +565,6 @@ function Menu () {
         ff1ffffffffffffffffffffffff1ff
         `, SpriteKind.Button)
     PlayButton.setPosition(80, 90)
-    HelpButton = sprites.create(img`
-        ff1ffffffffffffffffffffffff1ff
-        f1ff6666666666666666666666ff1f
-        1ff688888888888888888888886ff1
-        ff68666666666666666666666686ff
-        f6866ffffffffffff66ffffff6686f
-        f6866f1f1f1111f1f66f1111f6686f
-        f6666f1f1f1ffff1f66f1ff1f6666f
-        f6666f111f1111f1f66f1111f6666f
-        f6666f111f1ffff1f66f1ffff6666f
-        f6666f1f1f1111f1ffff1f6666666f
-        f9666f1f1ffffff1111fff6666669f
-        f6166fffff666fffffff666666696f
-        ff61666666666666666666666696ff
-        1ff811919999999999999999998ff1
-        f1ff8888888888888888888888ff1f
-        ff1ffffffffffffffffffffffff1ff
-        `, SpriteKind.Button)
-    HelpButton.setPosition(80, 110)
     Arrow2 = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -641,7 +608,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite2, l
 let Chest = 0
 let Bruja2: Sprite = null
 let Arrow2: Sprite = null
-let HelpButton: Sprite = null
 let PlayButton: Sprite = null
 let Character: Sprite = null
 let Existe = false
