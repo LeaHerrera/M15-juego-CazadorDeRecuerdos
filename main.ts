@@ -104,6 +104,34 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
         )
     }
 })
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite2, location) {
+    DialogMode = true
+    story.startCutscene(function () {
+        story.showPlayerChoices("Cojer parte", "Salir")
+        if (story.checkLastAnswer("Cojer parte")) {
+            tiles.setTileAt(location, sprites.dungeon.chestOpen)
+            DialogMode = false
+            Chest += 1
+            info.setScore(Chest)
+            story.cancelAllCutscenes()
+            if (Chest == 4) {
+                game.showLongText("Ya tienes todas la partes de la llave, podras abrrir la puerta", DialogLayout.Bottom)
+                for (let value of tiles.getTilesByType(assets.tile`myTile135`)) {
+                    tiles.setTileAt(value, assets.tile`myTile128`)
+                    tiles.setWallAt(value, false)
+                }
+                for (let value2 of tiles.getTilesByType(assets.tile`myTile138`)) {
+                    tiles.setTileAt(value2, assets.tile`myTile126`)
+                    tiles.setWallAt(value2, false)
+                }
+                teletransporte = true
+            }
+        } else {
+            DialogMode = false
+            story.cancelAllCutscenes()
+        }
+    })
+})
 function Level_Controler () {
     if (Level == 0) {
         Menu()
@@ -284,34 +312,6 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
         }
     }
 })
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
-    DialogMode = true
-    story.startCutscene(function () {
-        story.showPlayerChoices("Cojer parte", "Salir")
-        if (story.checkLastAnswer("Cojer parte")) {
-            tiles.setTileAt(location, sprites.dungeon.chestOpen)
-            DialogMode = false
-            Chest += 1
-            info.setScore(Chest)
-            story.cancelAllCutscenes()
-            if (Chest == 4) {
-                game.showLongText("Ya tienes todas la partes de la llave, podras abrrir la puerta", DialogLayout.Bottom)
-                for (let value of tiles.getTilesByType(assets.tile`myTile135`)) {
-                    tiles.setTileAt(value, assets.tile`myTile128`)
-                    tiles.setWallAt(value, false)
-                }
-                for (let value of tiles.getTilesByType(assets.tile`myTile138`)) {
-                    tiles.setTileAt(value, assets.tile`myTile126`)
-                    tiles.setWallAt(value, false)
-                }
-                teletransporte = true
-            }
-        } else {
-            DialogMode = false
-            story.cancelAllCutscenes()
-        }
-    })
-})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Existe) {
         animation.runImageAnimation(
@@ -468,6 +468,25 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
         )
     }
 })
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite22, location3) {
+    tiles.setTileAt(location3, sprites.dungeon.floorDark0)
+    for (let value3 of tiles.getTilesByType(sprites.dungeon.doorLockedNorth)) {
+        tiles.setTileAt(value3, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value3, false)
+    }
+    for (let value22 of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
+        tiles.setTileAt(value22, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value22, false)
+    }
+    for (let value32 of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
+        tiles.setTileAt(value32, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value32, false)
+    }
+    for (let value4 of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
+        tiles.setTileAt(value4, sprites.dungeon.floorMixed)
+        tiles.setWallAt(value4, false)
+    }
+})
 function Menu () {
     scene.setBackgroundImage(img`
         ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -586,29 +605,10 @@ function Menu () {
     controller.moveSprite(Arrow2)
     Arrow2.setBounceOnWall(true)
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite2, location) {
-    tiles.setTileAt(location, sprites.dungeon.floorDark0)
-    for (let value of tiles.getTilesByType(sprites.dungeon.doorLockedNorth)) {
-        tiles.setTileAt(value, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value, false)
-    }
-    for (let value2 of tiles.getTilesByType(sprites.dungeon.doorLockedSouth)) {
-        tiles.setTileAt(value2, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value2, false)
-    }
-    for (let value3 of tiles.getTilesByType(sprites.dungeon.floorDark3)) {
-        tiles.setTileAt(value3, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value3, false)
-    }
-    for (let value4 of tiles.getTilesByType(sprites.dungeon.floorLight3)) {
-        tiles.setTileAt(value4, sprites.dungeon.floorMixed)
-        tiles.setWallAt(value4, false)
-    }
-})
-let Chest = 0
 let Bruja2: Sprite = null
 let Arrow2: Sprite = null
 let PlayButton: Sprite = null
+let Chest = 0
 let Character: Sprite = null
 let Existe = false
 let teletransporte = false
@@ -618,6 +618,26 @@ let Level = 0
 game.splash("Cazador De Recuerdos")
 Level = 0
 Level_Controler()
+forever(function () {
+    if (Level == 1) {
+        music.playMelody("F F F D E - C D ", 420)
+        music.playMelody("E F E F E D C D ", 420)
+        music.playMelody("E F E F E E E E ", 420)
+        music.playMelody("G - G - - - - G ", 420)
+        music.playMelody("A G - G B A G - ", 420)
+        music.playMelody("C5 - - - C5 - C5 - ", 420)
+        music.playMelody("E D C - F E D E ", 420)
+    }
+    if (Level == 2) {
+        music.playMelody("F F F D E - C D ", 420)
+        music.playMelody("E F E F E D C D ", 420)
+        music.playMelody("E F E F E E E E ", 420)
+        music.playMelody("G - G - - - - G ", 420)
+        music.playMelody("A G - G B A G - ", 420)
+        music.playMelody("C5 - - - C5 - C5 - ", 420)
+        music.playMelody("E D C - F E D E ", 420)
+    }
+})
 forever(function () {
     if (DialogMode == false) {
         controller.moveSprite(Character)

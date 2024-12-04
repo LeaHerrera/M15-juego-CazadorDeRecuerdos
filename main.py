@@ -13,9 +13,9 @@ def on_on_overlap(sprite, otherSprite):
         story.show_player_choices("Hablar con la Bruja", "Salir")
         if story.check_last_answer("Hablar con la Bruja"):
             PlayerName = game.ask_for_string("Como te llamas aventurero?")
-            story.print_character_text(" Hola " + PlayerName + ". Eres un androide defectuoso, creado para una tarea que ya has olvidado.",
+            story.print_character_text(" Hola " + PlayerName + ". Eres un aventurero que ha perdido su memoria",
                 "Bruja")
-            story.print_character_text("Tu memoria se ha perdido, fragmentada en pedazos, y ahora viajas entre diferentes épocas de la humanidad para reconstruirla.",
+            story.print_character_text("Y ahora viajas entre diferentes épocas de la humanidad para reconstruirla.",
                 "Bruja")
             story.print_character_text("Cada era que atraviesas está llena de pistas, enigmas y personas que, aunque no lo sepan, tienen fragmentos de tu historia.",
                 "Bruja")
@@ -114,6 +114,46 @@ def on_up_pressed():
             False)
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
+def on_overlap_tile(sprite2, location):
+    global DialogMode
+    DialogMode = True
+    
+    def on_start_cutscene2():
+        global DialogMode, Chest, teletransporte
+        story.show_player_choices("Cojer parte", "Salir")
+        if story.check_last_answer("Cojer parte"):
+            tiles.set_tile_at(location, sprites.dungeon.chest_open)
+            DialogMode = False
+            Chest += 1
+            info.set_score(Chest)
+            story.cancel_all_cutscenes()
+            if Chest == 4:
+                game.show_long_text("Ya tienes todas la partes de la llave, podras abrrir la puerta",
+                    DialogLayout.BOTTOM)
+                for value in tiles.get_tiles_by_type(assets.tile("""
+                    myTile135
+                """)):
+                    tiles.set_tile_at(value, assets.tile("""
+                        myTile128
+                    """))
+                    tiles.set_wall_at(value, False)
+                for value2 in tiles.get_tiles_by_type(assets.tile("""
+                    myTile138
+                """)):
+                    tiles.set_tile_at(value2, assets.tile("""
+                        myTile126
+                    """))
+                    tiles.set_wall_at(value2, False)
+                teletransporte = True
+        else:
+            DialogMode = False
+            story.cancel_all_cutscenes()
+    story.start_cutscene(on_start_cutscene2)
+    
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.chest_closed,
+    on_overlap_tile)
+
 def Level_Controler():
     global teletransporte
     if Level == 0:
@@ -121,16 +161,11 @@ def Level_Controler():
     if Level == 1:
         Level1()
     if Level == 2:
-        Help()
-    if Level == 3:
         teletransporte = False
         Level2()
-    if Level == 4:
-        Level3()
 def Level2():
     global Chest
     sprites.destroy(PlayButton)
-    sprites.destroy(HelpButton)
     sprites.destroy(Arrow2)
     sprites.destroy(Bruja2)
     tiles.set_current_tilemap(tilemap("""
@@ -148,12 +183,6 @@ def on_a_pressed():
     if DialogMode == True:
         story.clear_all_text()
 controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
-
-def Level3():
-    tiles.set_current_tilemap(tilemap("""
-        level9
-    """))
-    Character.set_position(1, 14)
 
 def on_left_pressed():
     if Existe:
@@ -237,7 +266,6 @@ controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 def Level1():
     global Character, Bruja2, DialogMode
     sprites.destroy(Arrow2)
-    sprites.destroy(HelpButton)
     sprites.destroy(PlayButton)
     tiles.set_current_tilemap(tilemap("""
         level4
@@ -290,6 +318,7 @@ def Level1():
 
 def on_on_overlap2(sprite3, otherSprite2):
     global Level, Existe
+    HelpButton: Sprite = None
     if otherSprite2 == PlayButton and controller.A.is_pressed():
         Level = 1
         Existe = True
@@ -299,58 +328,20 @@ def on_on_overlap2(sprite3, otherSprite2):
         Level_Controler()
 sprites.on_overlap(SpriteKind.Arrow, SpriteKind.Button, on_on_overlap2)
 
-def on_overlap_tile(sprite4, location2):
+def on_overlap_tile2(sprite4, location2):
     global Level
     if Level == 1:
         if teletransporte == True:
-            Level = 3
+            Level = 2
             Level_Controler()
-    if Level == 3:
+    if Level == 2:
         if teletransporte == True:
-            Level = 4
-            Level_Controler()
+            game.show_long_text("Tu verdadero nombre es Elian, y eres un científico del futuro....",
+                DialogLayout.BOTTOM)
+            game.show_long_text("Continuara..........", DialogLayout.BOTTOM)
+            game.reset()
 scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.collectible_insignia,
-    on_overlap_tile)
-
-def on_overlap_tile2(sprite2, location):
-    global DialogMode
-    DialogMode = True
-    
-    def on_start_cutscene2():
-        global DialogMode, Chest, teletransporte
-        story.show_player_choices("Cojer parte", "Salir")
-        if story.check_last_answer("Cojer parte"):
-            tiles.set_tile_at(location, sprites.dungeon.chest_open)
-            DialogMode = False
-            Chest += 1
-            info.set_score(Chest)
-            story.cancel_all_cutscenes()
-            if Chest == 4:
-                game.show_long_text("Ya tienes todas la partes de la llave, podras abrrir la puerta",
-                    DialogLayout.BOTTOM)
-                for value in tiles.get_tiles_by_type(assets.tile("""
-                    myTile135
-                """)):
-                    tiles.set_tile_at(value, assets.tile("""
-                        myTile128
-                    """))
-                    tiles.set_wall_at(value, False)
-                for value2 in tiles.get_tiles_by_type(assets.tile("""
-                    myTile138
-                """)):
-                    tiles.set_tile_at(value2, assets.tile("""
-                        myTile126
-                    """))
-                    tiles.set_wall_at(value2, False)
-                teletransporte = True
-        else:
-            DialogMode = False
-            story.cancel_all_cutscenes()
-    story.start_cutscene(on_start_cutscene2)
-    
-scene.on_overlap_tile(SpriteKind.player,
-    sprites.dungeon.chest_closed,
     on_overlap_tile2)
 
 def on_right_pressed():
@@ -432,11 +423,6 @@ def on_right_pressed():
             False)
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
-def Help():
-    sprites.destroy(Arrow2)
-    sprites.destroy(HelpButton)
-    sprites.destroy(PlayButton)
-
 def on_down_pressed():
     if Existe:
         animation.run_image_animation(Character,
@@ -516,8 +502,28 @@ def on_down_pressed():
             False)
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
+def on_overlap_tile3(sprite22, location3):
+    tiles.set_tile_at(location3, sprites.dungeon.floor_dark0)
+    for value3 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
+        tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value3, False)
+    for value22 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
+        tiles.set_tile_at(value22, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value22, False)
+    for value32 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
+        tiles.set_tile_at(value32, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value32, False)
+    for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
+        tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
+        tiles.set_wall_at(value4, False)
+scene.on_overlap_tile(SpriteKind.player,
+    assets.tile("""
+        myTile
+    """),
+    on_overlap_tile3)
+
 def Menu():
-    global PlayButton, HelpButton, Arrow2
+    global PlayButton, Arrow2
     scene.set_background_image(img("""
         ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff99d99bbbbbcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -615,26 +621,6 @@ def Menu():
         """),
         SpriteKind.Button)
     PlayButton.set_position(80, 90)
-    HelpButton = sprites.create(img("""
-            ff1ffffffffffffffffffffffff1ff
-                    f1ff6666666666666666666666ff1f
-                    1ff688888888888888888888886ff1
-                    ff68666666666666666666666686ff
-                    f6866ffffffffffff66ffffff6686f
-                    f6866f1f1f1111f1f66f1111f6686f
-                    f6666f1f1f1ffff1f66f1ff1f6666f
-                    f6666f111f1111f1f66f1111f6666f
-                    f6666f111f1ffff1f66f1ffff6666f
-                    f6666f1f1f1111f1ffff1f6666666f
-                    f9666f1f1ffffff1111fff6666669f
-                    f6166fffff666fffffff666666696f
-                    ff61666666666666666666666696ff
-                    1ff811919999999999999999998ff1
-                    f1ff8888888888888888888888ff1f
-                    ff1ffffffffffffffffffffffff1ff
-        """),
-        SpriteKind.Button)
-    HelpButton.set_position(80, 110)
     Arrow2 = sprites.create(img("""
             . . . . . . . . . . . . . . . . 
                     . . . . . . . . . . . . . . . . 
@@ -656,32 +642,10 @@ def Menu():
         SpriteKind.Arrow)
     controller.move_sprite(Arrow2)
     Arrow2.set_bounce_on_wall(True)
-
-def on_overlap_tile3(sprite22, location3):
-    tiles.set_tile_at(location3, sprites.dungeon.floor_dark0)
-    for value3 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_north):
-        tiles.set_tile_at(value3, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value3, False)
-    for value22 in tiles.get_tiles_by_type(sprites.dungeon.door_locked_south):
-        tiles.set_tile_at(value22, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value22, False)
-    for value32 in tiles.get_tiles_by_type(sprites.dungeon.floor_dark3):
-        tiles.set_tile_at(value32, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value32, False)
-    for value4 in tiles.get_tiles_by_type(sprites.dungeon.floor_light3):
-        tiles.set_tile_at(value4, sprites.dungeon.floor_mixed)
-        tiles.set_wall_at(value4, False)
-scene.on_overlap_tile(SpriteKind.player,
-    assets.tile("""
-        myTile
-    """),
-    on_overlap_tile3)
-
-Chest = 0
 Bruja2: Sprite = None
 Arrow2: Sprite = None
-HelpButton: Sprite = None
 PlayButton: Sprite = None
+Chest = 0
 Character: Sprite = None
 Existe = False
 teletransporte = False
@@ -693,8 +657,27 @@ Level = 0
 Level_Controler()
 
 def on_forever():
+    if Level == 1:
+        music.play_melody("F F F D E - C D ", 420)
+        music.play_melody("E F E F E D C D ", 420)
+        music.play_melody("E F E F E E E E ", 420)
+        music.play_melody("G - G - - - - G ", 420)
+        music.play_melody("A G - G B A G - ", 420)
+        music.play_melody("C5 - - - C5 - C5 - ", 420)
+        music.play_melody("E D C - F E D E ", 420)
+    if Level == 2:
+        music.play_melody("F F F D E - C D ", 420)
+        music.play_melody("E F E F E D C D ", 420)
+        music.play_melody("E F E F E E E E ", 420)
+        music.play_melody("G - G - - - - G ", 420)
+        music.play_melody("A G - G B A G - ", 420)
+        music.play_melody("C5 - - - C5 - C5 - ", 420)
+        music.play_melody("E D C - F E D E ", 420)
+forever(on_forever)
+
+def on_forever2():
     if DialogMode == False:
         controller.move_sprite(Character)
     elif DialogMode == True:
         controller.move_sprite(Character, 0, 0)
-forever(on_forever)
+forever(on_forever2)
